@@ -59,6 +59,15 @@ export default function Navbar({ currentPage, onNavigate, onSearchOpen }) {
 
           <button
             className="btn btn-icon btn-ghost navbar__action-btn"
+            onClick={() => onNavigate('login')}
+            aria-label="Account"
+            id="nav-account-btn"
+          >
+            <Icon name="user" size={20} />
+          </button>
+
+          <button
+            className="btn btn-icon btn-ghost navbar__action-btn"
             onClick={() => onNavigate('wishlist')}
             aria-label="Wishlist"
             id="nav-wishlist-btn"

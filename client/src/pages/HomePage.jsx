@@ -1,11 +1,26 @@
+import { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { products as localProducts, categories } from '../data/products';
 import './HomePage.css';
 
 export default function HomePage({ onNavigate, onViewDetails }) {
-  const featured = products.filter(p => p.badge === 'Best Seller' || p.badge === 'Top Rated' || p.badge === 'New');
-  const trending = products.filter(p => p.rating >= 4.7).slice(0, 4);
+  const [featured, setFeatured] = useState([]);
+  const [trending, setTrending] = useState([]);
+
+  useEffect(() => {
+    // Top 4 best sellers/top rated
+    const featuredItems = localProducts.filter(p => p.badge === 'Best Seller' || p.badge === 'Top Rated' || p.badge === 'New').slice(0, 4);
+    if (featuredItems.length === 0) {
+      setFeatured(localProducts.slice(0, 4));
+    } else {
+      setFeatured(featuredItems);
+    }
+    
+    // Top 4 highest rating
+    const trendingItems = [...localProducts].sort((a,b) => b.rating - a.rating).slice(0, 4);
+    setTrending(trendingItems);
+  }, []);
 
   return (
     <div className="home-page" id="home-page">
@@ -128,14 +143,14 @@ export default function HomePage({ onNavigate, onViewDetails }) {
             </button>
           </div>
           <div className="products-grid">
-            {featured.map((product, i) => (
+            {featured.length > 0 ? featured.map((product, i) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 onViewDetails={onViewDetails}
                 style={{ animationDelay: `${i * 0.08}s` }}
               />
-            ))}
+            )) : <p>Loading...</p>}
           </div>
         </div>
       </section>
@@ -174,14 +189,14 @@ export default function HomePage({ onNavigate, onViewDetails }) {
             </button>
           </div>
           <div className="products-grid">
-            {trending.map((product, i) => (
+            {trending.length > 0 ? trending.map((product, i) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 onViewDetails={onViewDetails}
                 style={{ animationDelay: `${i * 0.08}s` }}
               />
-            ))}
+            )) : <p>Loading...</p>}
           </div>
         </div>
       </section>

@@ -9,6 +9,7 @@ import ShopPage from './pages/ShopPage';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 import AboutPage from './pages/AboutPage';
+import AuthPage from './pages/AuthPage';
 import { useCart } from './context/CartContext';
 
 function App() {
@@ -73,6 +74,10 @@ function App() {
         return <WishlistPage onNavigate={navigate} onViewDetails={viewProductDetails} />;
       case 'about':
         return <AboutPage onNavigate={navigate} />;
+      case 'login':
+        return <AuthPage isLogin={true} onNavigate={navigate} />;
+      case 'register':
+        return <AuthPage isLogin={false} onNavigate={navigate} />;
       default:
         return <HomePage onNavigate={navigate} onViewDetails={viewProductDetails} />;
     }

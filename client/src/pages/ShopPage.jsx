@@ -1,37 +1,64 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { products as localProducts, categories as localCategories } from '../data/products';
 import './ShopPage.css';
 
 export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState('featured');
   const [priceRange, setPriceRange] = useState('all');
+  
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([{ id: 'all', name: 'All Products' }]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = useMemo(() => {
-    let result = [...products];
+  // Load Categories (Mock)
+  useEffect(() => {
+    // using localCategories instead of API since user wants pure frontend
+    const cats = localCategories.map(c => ({ 
+      id: c.id, 
+      name: c.name 
+    }));
+    // We already have 'all' in state, but let's just make sure we merge properly
+    const uniqueCats = cats.filter(c => c.id !== 'all');
+    setCategories([{ id: 'all', name: 'All Products' }, ...uniqueCats]);
+  }, []);
 
-    // Filter by category
-    if (activeCategory !== 'all') {
-      result = result.filter(p => p.category === activeCategory);
-    }
+  // Load Products (Mock Data for Frontend-only view)
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      let filtered = [...localProducts];
 
-    // Filter by price range
-    if (priceRange === 'under100') result = result.filter(p => p.price < 100);
-    else if (priceRange === '100to200') result = result.filter(p => p.price >= 100 && p.price <= 200);
-    else if (priceRange === 'over200') result = result.filter(p => p.price > 200);
+      // Filter category
+      if (activeCategory !== 'all') {
+        filtered = filtered.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
+      }
 
-    // Sort
-    switch (sortBy) {
-      case 'price-low': result.sort((a, b) => a.price - b.price); break;
-      case 'price-high': result.sort((a, b) => b.price - a.price); break;
-      case 'rating': result.sort((a, b) => b.rating - a.rating); break;
-      case 'popular': result.sort((a, b) => b.reviews - a.reviews); break;
-      default: break;
-    }
+      // Filter price
+      if (priceRange === 'under100') {
+        filtered = filtered.filter(p => p.price <= 99.99);
+      } else if (priceRange === '100to200') {
+        filtered = filtered.filter(p => p.price >= 100 && p.price <= 200);
+      } else if (priceRange === 'over200') {
+        filtered = filtered.filter(p => p.price > 200);
+      }
 
-    return result;
+      // Sort
+      if (sortBy === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sortBy === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (sortBy === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      } else if (sortBy === 'popular') {
+        filtered.sort((a, b) => b.reviews - a.reviews);
+      }
+
+      setProducts(filtered);
+      setLoading(false);
+    }, 400); // simulate network
   }, [activeCategory, sortBy, priceRange]);
 
   return (
@@ -41,7 +68,7 @@ export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
         <div className="container">
           <h1 className="shop-page__title">Shop All Products</h1>
           <p className="shop-page__subtitle">
-            Discover our collection of {products.length} premium products
+            Discover our collection of premium products
           </p>
         </div>
       </div>
@@ -58,9 +85,6 @@ export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
                 id={`filter-cat-${cat.id}`}
               >
                 {cat.name}
-                {activeCategory === cat.id && (
-                  <span className="shop-filters__cat-count">{filtered.length}</span>
-                )}
               </button>
             ))}
           </div>
@@ -99,9 +123,13 @@ export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
         </div>
 
         {/* Results */}
-        {filtered.length > 0 ? (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--color-text-secondary)' }}>
+            Loading products...
+          </div>
+        ) : products.length > 0 ? (
           <div className="products-grid shop-page__grid">
-            {filtered.map((product, i) => (
+            {products.map((product, i) => (
               <ProductCard
                 key={product.id}
                 product={product}
