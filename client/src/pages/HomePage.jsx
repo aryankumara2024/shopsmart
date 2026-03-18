@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 import ProductCard from '../components/ProductCard';
-import { products as localProducts, categories } from '../data/products';
+import { categories } from '../data/products'; // Keep for static categories
 import './HomePage.css';
+
+const API_URL = 'http://localhost:5001/api';
 
 export default function HomePage({ onNavigate, onViewDetails }) {
   const [featured, setFeatured] = useState([]);
   const [trending, setTrending] = useState([]);
 
   useEffect(() => {
-    // Top 4 best sellers/top rated
-    const featuredItems = localProducts.filter(p => p.badge === 'Best Seller' || p.badge === 'Top Rated' || p.badge === 'New').slice(0, 4);
-    if (featuredItems.length === 0) {
-      setFeatured(localProducts.slice(0, 4));
-    } else {
-      setFeatured(featuredItems);
-    }
-    
-    // Top 4 highest rating
-    const trendingItems = [...localProducts].sort((a,b) => b.rating - a.rating).slice(0, 4);
-    setTrending(trendingItems);
+    fetch(`${API_URL}/products`)
+      .then(res => res.json())
+      .then(data => {
+        // Top 4 best sellers/top rated
+        const featuredItems = data.filter(p => p.badge === 'Best Seller' || p.badge === 'Top Rated' || p.badge === 'New').slice(0, 4);
+        setFeatured(featuredItems.length === 0 ? data.slice(0, 4) : featuredItems);
+        
+        // Top 4 highest rating
+        const trendingItems = [...data].sort((a,b) => (b.rating || 0) - (a.rating || 0)).slice(0, 4);
+        setTrending(trendingItems);
+      })
+      .catch(console.error);
   }, []);
 
   return (

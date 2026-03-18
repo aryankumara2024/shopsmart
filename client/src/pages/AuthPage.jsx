@@ -3,18 +3,48 @@ import PropTypes from 'prop-types';
 import Icon from '../components/Icon';
 import './AuthPage.css';
 
+const API_URL = 'http://localhost:5001/api';
+
 export default function AuthPage({ isLogin = true, onNavigate }) {
   const [isLoginForm, setIsLoginForm] = useState(isLogin);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const toggleForm = () => setIsLoginForm(!isLoginForm);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate authentication process
-    console.log(isLoginForm ? 'Logging in...' : 'Registering...');
-    // Simply route to home for now as demonstration
-    if (onNavigate) {
-      onNavigate('home');
+    
+    const endpoint = isLoginForm ? `${API_URL}/auth/login` : `${API_URL}/auth/register`;
+    const payload = isLoginForm ? { email, password } : { username: name, email, password };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        alert(data.message || 'Authentication failed');
+        return;
+      }
+      
+      console.log('Success:', data);
+      
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+      
+      if (onNavigate) {
+        onNavigate('home');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error or server is down');
     }
   };
 
@@ -49,7 +79,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
                 <label htmlFor="name">Full Name</label>
                 <div className="auth-input-wrap">
                   <Icon name="user" size={18} className="auth-input-icon" />
-                  <input type="text" id="name" placeholder="John Doe" required />
+                  <input type="text" id="name" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
               </div>
             )}
@@ -58,7 +88,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
               <label htmlFor="email">Email Address</label>
               <div className="auth-input-wrap">
                 <Icon name="mail" size={18} className="auth-input-icon" />
-                <input type="email" id="email" placeholder="hello@example.com" required />
+                <input type="email" id="email" placeholder="hello@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
             </div>
 
@@ -71,7 +101,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
               </div>
               <div className="auth-input-wrap">
                 <Icon name="lock" size={18} className="auth-input-icon" />
-                <input type="password" id="password" placeholder="••••••••" required />
+                <input type="password" id="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
               </div>
             </div>
 

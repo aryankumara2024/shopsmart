@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import Icon from '../components/Icon';
 import ProductCard from '../components/ProductCard';
-import { products as localProducts, categories as localCategories } from '../data/products';
+import { categories as localCategories } from '../data/products';
 import './ShopPage.css';
+
+const API_URL = 'http://localhost:5001/api';
 
 export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
@@ -10,56 +12,66 @@ export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
   const [priceRange, setPriceRange] = useState('all');
   
   const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([{ id: 'all', name: 'All Products' }]);
   const [loading, setLoading] = useState(true);
 
   // Load Categories (Mock)
   useEffect(() => {
-    // using localCategories instead of API since user wants pure frontend
     const cats = localCategories.map(c => ({ 
       id: c.id, 
       name: c.name 
     }));
-    // We already have 'all' in state, but let's just make sure we merge properly
     const uniqueCats = cats.filter(c => c.id !== 'all');
     setCategories([{ id: 'all', name: 'All Products' }, ...uniqueCats]);
   }, []);
 
-  // Load Products (Mock Data for Frontend-only view)
+  // Fetch all products from API
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
-      let filtered = [...localProducts];
+    fetch(`${API_URL}/products`)
+      .then(res => res.json())
+      .then(data => {
+        setAllProducts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching products:', err);
+        setLoading(false);
+      });
+  }, []);
 
-      // Filter category
-      if (activeCategory !== 'all') {
-        filtered = filtered.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
-      }
+  // Filter Products locally when filters change or products are loaded
+  useEffect(() => {
+    let filtered = [...allProducts];
 
-      // Filter price
-      if (priceRange === 'under100') {
-        filtered = filtered.filter(p => p.price <= 99.99);
-      } else if (priceRange === '100to200') {
-        filtered = filtered.filter(p => p.price >= 100 && p.price <= 200);
-      } else if (priceRange === 'over200') {
-        filtered = filtered.filter(p => p.price > 200);
-      }
+    // Filter category
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter(p => p.category && p.category.toLowerCase() === activeCategory.toLowerCase());
+    }
 
-      // Sort
-      if (sortBy === 'price-low') {
-        filtered.sort((a, b) => a.price - b.price);
-      } else if (sortBy === 'price-high') {
-        filtered.sort((a, b) => b.price - a.price);
-      } else if (sortBy === 'rating') {
-        filtered.sort((a, b) => b.rating - a.rating);
-      } else if (sortBy === 'popular') {
-        filtered.sort((a, b) => b.reviews - a.reviews);
-      }
+    // Filter price
+    if (priceRange === 'under100') {
+      filtered = filtered.filter(p => p.price <= 99.99);
+    } else if (priceRange === '100to200') {
+      filtered = filtered.filter(p => p.price >= 100 && p.price <= 200);
+    } else if (priceRange === 'over200') {
+      filtered = filtered.filter(p => p.price > 200);
+    }
 
-      setProducts(filtered);
-      setLoading(false);
-    }, 400); // simulate network
-  }, [activeCategory, sortBy, priceRange]);
+    // Sort
+    if (sortBy === 'price-low') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'rating') {
+      filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else if (sortBy === 'popular') {
+      filtered.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
+    }
+
+    setProducts(filtered);
+  }, [activeCategory, sortBy, priceRange, allProducts]);
 
   return (
     <div className="shop-page" id="shop-page">

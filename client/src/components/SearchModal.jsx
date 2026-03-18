@@ -1,11 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import Icon from './Icon';
-import { products } from '../data/products';
 import './SearchModal.css';
+
+const API_URL = 'http://localhost:5001/api';
 
 export default function SearchModal({ isOpen, onClose, onViewDetails }) {
   const [query, setQuery] = useState('');
+  const [products, setProducts] = useState([]);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    // Fetch products for search when component mounts
+    fetch(`${API_URL}/products`)
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -25,8 +35,8 @@ export default function SearchModal({ isOpen, onClose, onViewDetails }) {
   const filtered = query.trim().length > 0
     ? products.filter(p =>
         p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.category.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase())
+        (p.category && p.category.toLowerCase().includes(query.toLowerCase())) ||
+        (p.description && p.description.toLowerCase().includes(query.toLowerCase()))
       )
     : [];
 
