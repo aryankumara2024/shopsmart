@@ -24,21 +24,21 @@ PROJECT_ROOT=$(pwd)
 
 echo "Starting project setup..."
 
-# Setup Server
+# Setup Backend
 echo "--------------------------------------------------"
-echo "Setting up Server..."
+echo "Setting up Backend..."
 echo "--------------------------------------------------"
-if [ -d "server" ]; then
-  cd server || exit 1
+if [ -d "backend" ]; then
+  cd backend || exit 1
   if [ -f "package.json" ]; then
-    echo "Installing server dependencies..."
+    echo "Installing backend dependencies..."
     npm install
   else
-    echo "Warning: package.json not found in server directory."
+    echo "Warning: package.json not found in backend directory."
   fi
   cd "$PROJECT_ROOT" || exit 1
 else
-  echo "Error: server directory not found." >&2
+  echo "Error: backend directory not found." >&2
   exit 1
 fi
 
