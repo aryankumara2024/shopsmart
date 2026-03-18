@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  productId     Int   @unique // To map your frontend string ID if needed, or just use `id`
+  name          String
+  price         Float
+  originalPrice Float?
+  description   String?
+  category      String
+  image         String?
+  badge         String?
+  rating        Float    @default(0)
+  reviews       Int      @default(0)
+  colors        String   @default("[]") // Store as JSON string since SQLite doesn't natively support scalar arrays
+  features      String   @default("[]") // Store as JSON string
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
