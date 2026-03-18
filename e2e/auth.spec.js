@@ -23,7 +23,10 @@ test.describe('Authentication Flow', () => {
     await page.locator('input[name="password"]').fill(testPassword);
     
     // Intercept standard alert (Mocked natively inside app)
-    page.on('dialog', dialog => dialog.accept());
+    page.on('dialog', dialog => {
+      console.log('Dialog message:', dialog.message());
+      dialog.accept();
+    });
     
     // Submit registration
     await page.locator('button[type="submit"]:has-text("Register")').click();

@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Navbar from './Navbar';
+import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../context/CartContext';
 import { WishlistProvider } from '../context/WishlistContext';
 
@@ -12,11 +13,13 @@ function renderNavbar(props = {}) {
     onSearchOpen: vi.fn(),
   };
   return render(
-    <CartProvider>
-      <WishlistProvider>
-        <Navbar {...defaults} {...props} />
-      </WishlistProvider>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <Navbar {...defaults} {...props} />
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

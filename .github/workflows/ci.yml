@@ -89,6 +89,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Prisma and Setup DB
+        run: |
+          npx prisma generate
+          npx prisma db push
+
       - name: Run lint
         run: npm run lint
 
@@ -130,6 +135,20 @@ jobs:
         working-directory: ./client
         run: npm ci
 
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Generate Prisma and Setup DB for E2E
+        working-directory: ./backend
+        run: |
+          npx prisma generate
+          npx prisma db push
+
+      - name: Start Backend server in background
+        working-directory: ./backend
+        run: npm start &
+        
       - name: Run E2E tests
         run: npm run test:e2e:ci
 

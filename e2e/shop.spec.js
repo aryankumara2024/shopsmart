@@ -50,6 +50,6 @@ test.describe('Shop Page', () => {
   test('search modal opens when search icon is clicked', async ({ page }) => {
     await page.locator('#nav-search-btn').click();
     // Search modal should appear
-    await expect(page.locator('.search-modal, [role="dialog"], input[placeholder*="Search"]')).toBeVisible({ timeout: 3000 });
+    await expect(page.locator('#search-modal')).toBeVisible({ timeout: 3000 });
   });
 });

@@ -23,8 +23,7 @@ module.exports = defineConfig({
   ],
   // Start Vite dev server before running E2E tests
   webServer: {
-    command: 'npm run dev',
-    cwd: './client',
+    command: 'npm run start --prefix backend & npm run dev --prefix client',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
     timeout: 60000,

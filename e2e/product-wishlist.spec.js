@@ -10,33 +10,27 @@ test.describe('Product Detail Modal', () => {
   test('clicking product name opens the detail modal', async ({ page }) => {
     await page.locator('.product-card__name').first().click();
     // Modal should be visible
-    await expect(page.locator('.product-detail, [class*="product-detail"]').first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('#product-detail-modal')).toBeVisible({ timeout: 5000 });
   });
 
   test('product detail modal shows product information', async ({ page }) => {
     const productName = await page.locator('.product-card__name').first().innerText();
     await page.locator('.product-card__name').first().click();
 
-    const modal = page.locator('.product-detail, [class*="product-detail"]').first();
+    const modal = page.locator('#product-detail-modal');
     await expect(modal).toBeVisible();
     await expect(modal.getByText(productName)).toBeVisible();
   });
 
   test('product detail modal can be closed', async ({ page }) => {
     await page.locator('.product-card__name').first().click();
-    const modal = page.locator('.product-detail, [class*="product-detail"]').first();
+    const modal = page.locator('#product-detail-modal');
     await expect(modal).toBeVisible();
 
-    // Find close button and click it
-    const closeBtn = modal.locator('button[aria-label*="close" i], button[aria-label*="Close" i], button[class*="close"]').first();
-    if (await closeBtn.isVisible()) {
-      await closeBtn.click();
-    } else {
-      // Try Escape key
-      await page.keyboard.press('Escape');
-    }
-
-    await expect(modal).not.toBeVisible({ timeout: 3000 });
+    // Click the backdrop to close the modal
+    await modal.click({ position: { x: 10, y: 10 } });
+    
+    await expect(modal).toBeHidden({ timeout: 5000 });
   });
 });
 

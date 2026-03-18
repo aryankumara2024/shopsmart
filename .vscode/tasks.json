@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "run-client-test",
+			"type": "shell",
+			"command": "cd client && npm run test -- --run > out.txt 2>&1 || true"
+		},
+		{
+			"label": "verify-client-tests",
+			"type": "shell",
+			"command": "cd client && npm run test -- --run > out.txt 2>&1 || true"
+		},
+		{
+			"label": "run-e2e",
+			"type": "shell",
+			"command": "npm run test:e2e > e2e_out.txt 2>&1 || true"
+		},
+		{
+			"label": "e2e-nav",
+			"type": "shell",
+			"command": "npx playwright test e2e/navigation.spec.js > nav_e2e.txt 2>&1"
+		},
+		{
+			"label": "e2e-auth",
+			"type": "shell",
+			"command": "npx playwright test e2e/auth.spec.js > auth_e2e.txt 2>&1"
+		},
+		{
+			"label": "e2e-auth-debug",
+			"type": "shell",
+			"command": "cat e2e_out_3.txt > playwright_errors.txt && npx playwright test e2e/auth.spec.js > auth_failed.txt 2>&1 || true"
+		}
+	]
+}

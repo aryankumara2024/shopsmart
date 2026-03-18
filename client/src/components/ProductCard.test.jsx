@@ -68,7 +68,7 @@ describe('ProductCard', () => {
 
   it('renders the Add button', () => {
     renderCard();
-    expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^add$/i })).toBeInTheDocument();
   });
 
   it('calls onViewDetails when product name is clicked', () => {

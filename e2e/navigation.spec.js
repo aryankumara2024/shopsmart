@@ -19,7 +19,7 @@ test.describe('Navigation', () => {
 
   test('clicking Shop nav link navigates to shop page', async ({ page }) => {
     await page.locator('#nav-link-shop').click();
-    await expect(page.getByText(/all products/i)).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('h1.shop-page__title', { hasText: /all products/i })).toBeVisible({ timeout: 5000 });
   });
 
   test('clicking About nav link navigates to about page', async ({ page }) => {

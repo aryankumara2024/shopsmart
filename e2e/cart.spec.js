@@ -17,19 +17,24 @@ test.describe('Cart Flow', () => {
   });
 
   test('adding a product and navigating to cart shows the item', async ({ page }) => {
-    // Go to shop and add an item
-    await page.locator('#nav-link-shop').click();
-    await page.waitForSelector('.product-card');
+    // Navigate home
+    await page.goto('/');
 
-    // Get the product name before clicking Add
-    const productName = await page.locator('.product-card__name').first().innerText();
-    await page.locator('[id^="add-to-cart-"]').first().click();
+    // Wait for products to load and be visible
+    await expect(page.locator('.product-card').first()).toBeVisible({ timeout: 5000 });
 
-    // Navigate to cart
-    await page.locator('#nav-cart-btn').click();
+    // Find the first product card
+    const firstProduct = page.locator('.product-card').first();
+    const productName = await firstProduct.locator('.product-card__name').textContent();
+    
+    // Click its 'Add' button
+    await firstProduct.locator('button:has-text("Add")').click();
 
-    // Product should appear in cart
-    await expect(page.getByText(productName)).toBeVisible({ timeout: 5000 });
+    // Navigate to Cart
+    await page.locator('#nav-link-cart, [aria-label*="cart" i]').click();
+
+    // Product should appear in cart as a heading or within the cart item
+    await expect(page.locator('.cart-item__name', { hasText: productName })).toBeVisible({ timeout: 5000 });
   });
 
   test('cart count badge updates after adding multiple items', async ({ page }) => {
@@ -47,14 +52,18 @@ test.describe('Cart Flow', () => {
   });
 
   test('toast notification appears after adding to cart', async ({ page }) => {
-    await page.locator('#nav-link-shop').click();
-    await page.waitForSelector('.product-card');
+    // Navigate home
+    await page.goto('/');
 
-    await page.locator('[id^="add-to-cart-"]').first().click();
+    // Wait for products
+    await expect(page.locator('.product-card').first()).toBeVisible({ timeout: 5000 });
 
-    // Toast should appear — look for "added to cart" type text
+    // Click 'Add' on the first product
+    await page.locator('.product-card').first().locator('button:has-text("Add")').click();
+
+    // Verify toast notification appears
     await expect(
-      page.locator('text=/added to cart/i').or(page.locator('.toast, [class*="toast"]'))
+      page.locator('.toast').first()
     ).toBeVisible({ timeout: 4000 });
   });
 });
