@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
+const API_URL = `http://${window.location.hostname}:5001/api`;
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Check valid session on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      fetch('http://localhost:5001/api/auth/me', {
+      fetch(`${API_URL}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

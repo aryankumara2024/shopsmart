@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import { categories as localCategories } from '../data/products';
 import './ShopPage.css';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `http://${window.location.hostname}:5001/api`;
 
 export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
   const [activeCategory, setActiveCategory] = useState(initialCategory);

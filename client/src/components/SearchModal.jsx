@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Icon from './Icon';
 import './SearchModal.css';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `http://${window.location.hostname}:5001/api`;
 
 export default function SearchModal({ isOpen, onClose, onViewDetails }) {
   const [query, setQuery] = useState('');

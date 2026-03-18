@@ -4,7 +4,7 @@ import Icon from '../components/Icon';
 import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `http://${window.location.hostname}:5001/api`;
 
 export default function AuthPage({ isLogin = true, onNavigate }) {
   const [isLoginForm, setIsLoginForm] = useState(isLogin);

@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import { categories } from '../data/products'; // Keep for static categories
 import './HomePage.css';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `http://${window.location.hostname}:5001/api`;
 
 export default function HomePage({ onNavigate, onViewDetails }) {
   const [featured, setFeatured] = useState([]);
