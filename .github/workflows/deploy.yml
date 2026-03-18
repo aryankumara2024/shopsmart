@@ -1,0 +1,56 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. Update system packages and install Node.js/Git if they don't exist
+            curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - || curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
+            sudo yum install -y nodejs git || sudo apt-get install -y nodejs git 
+
+            # 2. Install PM2 globally for daemonizing the servers
+            sudo npm install -g pm2
+
+            # 3. Clone or pull the repository
+            if [ ! -d "shopsmart" ]; then
+              git clone https://github.com/${{ github.repository }}.git shopsmart
+            fi
+            cd shopsmart
+            git pull origin main
+
+            # 4. Deploy Backend
+            echo "Deploying Backend..."
+            cd backend
+            npm install
+            npx prisma generate
+            npx prisma db push
+            npm run seed || echo "Seeding skipped or failed"
+            pm2 restart backend || pm2 start src/app.js --name "backend"
+
+            # 5. Deploy Frontend
+            echo "Deploying Frontend..."
+            cd ../client
+            npm install
+            npm run build
+            # We serve the frontend preview build using PM2 as well
+            pm2 restart client || pm2 start npm --name "client" -- run preview -- --host 0.0.0.0 --port 5173
+
+            # 6. Save PM2 state
+            pm2 save
