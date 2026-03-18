@@ -81,7 +81,7 @@ export default function SearchModal({ isOpen, onClose, onViewDetails }) {
         {query.trim().length > 0 && filtered.length === 0 && (
           <div className="search-modal__empty">
             <Icon name="search" size={32} style={{ color: 'var(--color-text-tertiary)' }} />
-            <p>No products found for "<strong>{query}</strong>"</p>
+            <p>No products found for &quot;<strong>{query}</strong>&quot;</p>
             <p className="search-modal__empty-hint">Try a different search term</p>
           </div>
         )}

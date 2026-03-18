@@ -44,7 +44,7 @@ export default function HomePage({ onNavigate, onViewDetails }) {
             </span>
             <h1 className="hero__title">
               Discover Products<br />
-              <span className="hero__title-accent">You'll Love</span>
+              <span className="hero__title-accent">You&apos;ll Love</span>
             </h1>
             <p className="hero__subtitle">
               Curated premium products for the modern lifestyle. From cutting-edge tech to timeless accessories — find your next favorite thing.
@@ -167,7 +167,7 @@ export default function HomePage({ onNavigate, onViewDetails }) {
               <span className="badge badge-warning">Limited Time</span>
               <h2 className="promo-banner__title">Winter Sale — Up to 40% Off</h2>
               <p className="promo-banner__desc">
-                Don't miss our biggest sale of the season. Premium products at unbeatable prices.
+                Don&apos;t miss our biggest sale of the season. Premium products at unbeatable prices.
               </p>
               <button className="btn btn-primary btn-lg" onClick={() => onNavigate('shop')} id="promo-shop-btn">
                 Shop the Sale
@@ -184,7 +184,7 @@ export default function HomePage({ onNavigate, onViewDetails }) {
           <div className="section__header">
             <div>
               <h2 className="section__title">Trending Now</h2>
-              <p className="section__subtitle">What everyone's loving</p>
+              <p className="section__subtitle">What everyone&apos;s loving</p>
             </div>
             <button className="btn btn-secondary" onClick={() => onNavigate('shop')} id="view-all-trending">
               View All

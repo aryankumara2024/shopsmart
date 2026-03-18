@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
+
 
 const AuthContext = createContext();
 
@@ -20,8 +20,8 @@ export function AuthProvider({ children }) {
       })
       .then(res => res.json())
       .then(data => {
-        if (data._id) {
-          setUser({ id: data._id, username: data.username, email: data.email });
+        if (data.id) {
+          setUser({ id: data.id, username: data.username, email: data.email });
         } else {
           localStorage.removeItem('token');
         }
@@ -53,9 +53,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

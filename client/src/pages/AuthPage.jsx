@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+
 import Icon from '../components/Icon';
 import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
@@ -35,12 +35,6 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
         return;
       }
       
-      console.log('Success:', data);
-      
-      // Usually register might not return token directly depending on the backend, 
-      // but in our authController it only creates the user. Wait, does register login?
-      // Our register just does: res.status(201).json({ message: 'User created successfully' });
-      // So if not isLoginForm, we should probably toggle to login form.
       if (!isLoginForm) {
         alert('Account created! Please log in.');
         toggleForm();
@@ -93,7 +87,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
                 <label htmlFor="name">Full Name</label>
                 <div className="auth-input-wrap">
                   <Icon name="user" size={18} className="auth-input-icon" />
-                  <input type="text" id="name" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} required />
+                  <input type="text" id="name" name="username" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
               </div>
             )}
@@ -102,7 +96,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
               <label htmlFor="email">Email Address</label>
               <div className="auth-input-wrap">
                 <Icon name="mail" size={18} className="auth-input-icon" />
-                <input type="email" id="email" placeholder="hello@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+                <input type="email" id="email" name="email" placeholder="hello@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
             </div>
 
@@ -115,12 +109,12 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
               </div>
               <div className="auth-input-wrap">
                 <Icon name="lock" size={18} className="auth-input-icon" />
-                <input type="password" id="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
+                <input type="password" id="password" name="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
               </div>
             </div>
 
             <button type="submit" className="btn btn-primary btn-block auth-submit-btn">
-              {isLoginForm ? 'Sign In' : 'Sign Up'}
+              {isLoginForm ? 'Login' : 'Register'}
             </button>
           </form>
 
@@ -141,7 +135,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
             <p>
               {isLoginForm ? "Don't have an account?" : "Already have an account?"}
               <button className="auth-toggle-btn" onClick={toggleForm}>
-                {isLoginForm ? 'Sign up' : 'Sign in'}
+                {isLoginForm ? 'Register' : 'Login'}
               </button>
             </p>
           </div>
@@ -151,7 +145,3 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
   );
 }
 
-AuthPage.propTypes = {
-  isLogin: PropTypes.bool,
-  onNavigate: PropTypes.func
-};

@@ -31,7 +31,11 @@ import {
   Footprints,
   Shirt,
   Home,
-  ShoppingBag
+  ShoppingBag,
+  Mail,
+  Lock,
+  Eye,
+  Github
 } from 'lucide-react';
 
 const iconMap = {
@@ -70,18 +74,20 @@ const iconMap = {
   footprints: Footprints,
   shirt: Shirt,
   home: Home,
-  shoppingBag: ShoppingBag
+  shoppingBag: ShoppingBag,
+  mail: Mail,
+  lock: Lock,
+  eye: Eye,
+  github: Github
 };
 
 export default function Icon({ name, size = 24, className = '', ...props }) {
   const LucideIcon = iconMap[name];
 
   if (!LucideIcon) {
-    console.warn(`Icon ${name} not found`);
     return <div className={`icon-placeholder ${className}`} style={{ width: size, height: size }} />;
   }
 
-  // Handle special fill cases
   const isFilled = name === 'heartFilled' || name === 'star';
   const fillStyle = isFilled ? 'currentColor' : 'none';
 
@@ -94,3 +100,4 @@ export default function Icon({ name, size = 24, className = '', ...props }) {
     />
   );
 }
+

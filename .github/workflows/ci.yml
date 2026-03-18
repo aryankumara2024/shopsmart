@@ -90,7 +90,7 @@ jobs:
         run: npm ci
 
       - name: Run lint
-        run: npm run lint --if-present
+        run: npm run lint
 
       - name: Run integration tests
         run: npm test -- --forceExit --passWithNoTests

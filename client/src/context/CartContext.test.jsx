@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { CartProvider, useCart } from './CartContext';
 
 const wrapper = ({ children }) => <CartProvider>{children}</CartProvider>;

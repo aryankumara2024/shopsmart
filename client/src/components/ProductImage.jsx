@@ -1,4 +1,3 @@
-// Product image generator - using high-quality Unsplash imagery for that premium Dribbble feel.
 
 const premiumImages = {
   headphones: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
@@ -11,12 +10,12 @@ const premiumImages = {
   tracker: 'https://images.unsplash.com/photo-1557438159-51eec7a6c9e8?w=800&q=80',
   scarf: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=800&q=80',
   lamp: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&q=80',
-  duffel: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80', // reusing for now
+  duffel: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
   sunglasses: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&q=80',
   default: 'https://images.unsplash.com/photo-1600164318356-91f86cd3cbdb?w=800&q=80'
 };
 
-export function ProductImage({ image, name, size = 'md', className = '' }) {
+export function ProductImage({ image, name, className = '' }) {
   const imageUrl = premiumImages[image] || premiumImages.default;
 
   return (

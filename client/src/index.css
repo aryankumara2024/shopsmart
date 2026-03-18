@@ -88,13 +88,6 @@
   --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.1), 0 0 40px rgba(255, 255, 255, 0.05);
   --shadow-glow-warm: 0 0 20px rgba(255, 51, 102, 0.2), 0 0 40px rgba(255, 153, 51, 0.1);
 
-  /* Borders & Radii */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1.25rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
-
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);

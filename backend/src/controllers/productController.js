@@ -19,14 +19,14 @@ exports.getAllProducts = async (req, res) => {
 
 exports.getProductById = async (req, res) => {
     try {
-        const product = await prisma.product.findFirst({
-            where: {
-                OR: [
-                    { id: req.params.id },
-                    { productId: req.params.id }
-                ]
-            }
-        });
+        const paramId = req.params.id;
+        const numericId = parseInt(paramId, 10);
+
+        const whereClause = isNaN(numericId)
+            ? { id: paramId }
+            : { OR: [{ id: paramId }, { productId: numericId }] };
+
+        const product = await prisma.product.findFirst({ where: whereClause });
         if (!product) return res.status(404).json({ message: 'Product not found' });
         res.json({
             ...product,
@@ -38,3 +38,4 @@ exports.getProductById = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+

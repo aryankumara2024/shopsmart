@@ -5,7 +5,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { ProductImage } from './ProductImage';
 import './ProductDetail.css';
 
-export default function ProductDetail({ product, onClose, onNavigateShop }) {
+export default function ProductDetail({ product, onClose }) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
@@ -34,7 +34,7 @@ export default function ProductDetail({ product, onClose, onNavigateShop }) {
           {/* Image Section */}
           <div className="detail__image-section">
             <div className="detail__image-main">
-              <ProductImage image={product.image} name={product.name} size="lg" />
+              <ProductImage image={product.image} name={product.name} />
             </div>
           </div>
 

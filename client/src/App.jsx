@@ -104,7 +104,6 @@ function App() {
       <ProductDetail
         product={selectedProduct}
         onClose={closeProductDetails}
-        onNavigateShop={() => navigate('shop')}
       />
 
       <Toast toasts={toasts} removeToast={removeToast} />

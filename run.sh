@@ -62,7 +62,7 @@ fi
 
 echo "--------------------------------------------------"
 echo "Setup complete! Ready to start."
-echo "To run the server: cd server && npm start"
+echo "To run the server: cd backend && npm start"
 echo "To run the client: cd client && npm run dev"
 echo "--------------------------------------------------"
 

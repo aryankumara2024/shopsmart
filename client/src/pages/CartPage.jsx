@@ -15,7 +15,7 @@ export default function CartPage({ onNavigate, onViewDetails }) {
               <Icon name="shoppingBag" size={48} />
             </div>
             <h2 className="cart-empty__title">Your cart is empty</h2>
-            <p className="cart-empty__desc">Looks like you haven't added anything yet. Start exploring our collection!</p>
+            <p className="cart-empty__desc">Looks like you haven&apos;t added anything yet. Start exploring our collection!</p>
             <button className="btn btn-primary btn-lg" onClick={() => onNavigate('shop')} id="cart-browse-btn">
               <Icon name="shoppingBag" size={20} />
               Browse Products
@@ -44,7 +44,7 @@ export default function CartPage({ onNavigate, onViewDetails }) {
             {cart.map(item => (
               <div key={item.id} className="cart-item card animate-fade-in" id={`cart-item-${item.id}`}>
                 <div className="cart-item__image" onClick={() => onViewDetails(item)}>
-                  <ProductImage image={item.image} name={item.name} size="sm" />
+                  <ProductImage image={item.image} name={item.name} />
                 </div>
 
                 <div className="cart-item__info">
@@ -120,7 +120,7 @@ export default function CartPage({ onNavigate, onViewDetails }) {
             {shipping === 0 && (
               <div className="cart-summary__badge">
                 <Icon name="truck" size={16} />
-                <span>You've qualified for free shipping!</span>
+                <span>You&apos;ve qualified for free shipping!</span>
               </div>
             )}
 

@@ -15,7 +15,7 @@ export default function Footer({ onNavigate }) {
               <span className="footer__logo-text">ShopSmart</span>
             </div>
             <p className="footer__tagline">
-              Curating premium products for the modern lifestyle. Quality you can trust, design you'll love.
+              Curating premium products for the modern lifestyle. Quality you can trust, design you&apos;ll love.
             </p>
             <div className="footer__socials">
               {['@', 'in', 'f', 'yt'].map(s => (

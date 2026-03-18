@@ -154,7 +154,7 @@ export default function ShopPage({ onViewDetails, initialCategory = 'all' }) {
           <div className="shop-page__empty">
             <Icon name="package" size={48} style={{ color: 'var(--color-text-tertiary)' }} />
             <h3>No products found</h3>
-            <p>Try adjusting your filters to find what you're looking for.</p>
+            <p>Try adjusting your filters to find what you&apos;re looking for.</p>
             <button className="btn btn-secondary" onClick={() => { setActiveCategory('all'); setPriceRange('all'); }}>
               Clear Filters
             </button>

@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { WishlistProvider, useWishlist } from './WishlistContext';
 
 const wrapper = ({ children }) => <WishlistProvider>{children}</WishlistProvider>;
