@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import Icon from './Icon';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 export default function Navbar({ currentPage, onNavigate, onSearchOpen }) {
   const { cartCount } = useCart();
+  const { user, logoutContext } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -57,14 +59,34 @@ export default function Navbar({ currentPage, onNavigate, onSearchOpen }) {
             <Icon name="search" size={20} />
           </button>
 
-          <button
-            className="btn btn-icon btn-ghost navbar__action-btn"
-            onClick={() => onNavigate('login')}
-            aria-label="Account"
-            id="nav-account-btn"
-          >
-            <Icon name="user" size={20} />
-          </button>
+          {user ? (
+            <div className="navbar__user-menu" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '0.5rem' }}>
+              <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+                Hi, {user.username || 'User'}
+              </span>
+              <button
+                className="btn btn-icon btn-ghost navbar__action-btn"
+                onClick={() => {
+                  logoutContext();
+                  onNavigate('home');
+                }}
+                aria-label="Logout"
+                title="Logout"
+                id="nav-logout-btn"
+              >
+                <Icon name="x" size={20} />
+              </button>
+            </div>
+          ) : (
+            <button
+              className="btn btn-icon btn-ghost navbar__action-btn"
+              onClick={() => onNavigate('login')}
+              aria-label="Account"
+              id="nav-account-btn"
+            >
+              <Icon name="user" size={20} />
+            </button>
+          )}
 
           <button
             className="btn btn-icon btn-ghost navbar__action-btn"

@@ -44,6 +44,7 @@ const iconMap = {
   starEmpty: Star,
   menu: Menu,
   close: X,
+  x: X,
   chevronRight: ChevronRight,
   chevronLeft: ChevronLeft,
   chevronDown: ChevronDown,

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../components/Icon';
+import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
 
 const API_URL = 'http://localhost:5001/api';
@@ -10,6 +11,7 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { loginContext } = useAuth();
 
   const toggleForm = () => setIsLoginForm(!isLoginForm);
 
@@ -35,7 +37,19 @@ export default function AuthPage({ isLogin = true, onNavigate }) {
       
       console.log('Success:', data);
       
-      if (data.token) {
+      // Usually register might not return token directly depending on the backend, 
+      // but in our authController it only creates the user. Wait, does register login?
+      // Our register just does: res.status(201).json({ message: 'User created successfully' });
+      // So if not isLoginForm, we should probably toggle to login form.
+      if (!isLoginForm) {
+        alert('Account created! Please log in.');
+        toggleForm();
+        return;
+      }
+      
+      if (data.token && data.user) {
+        loginContext(data.user, data.token);
+      } else if (data.token) {
         localStorage.setItem('token', data.token);
       }
       
