@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shopsmart-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DATABASE_URL=file:./dev.db
+    volumes:
+      # Mount the prisma directory to persist the SQLite database inside the container
+      - backend_data:/usr/src/app/prisma
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: shopsmart-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      # Vite picks up process.env variables natively if used inside vite.config.js (via node), 
+      # configured to map API proxy requests internally via Docker networking
+      - VITE_API_URL=http://backend:5001
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_data:
