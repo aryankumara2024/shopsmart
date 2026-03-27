@@ -1,50 +1,132 @@
 # ShopSmart
 
-ShopSmart is a modern, responsive, and elegant e-commerce application designed with a premium, sleek aesthetic. 
-The project features a full-stack architecture with a React frontend, Node.js/Express backend, and a SQLite database.
+ShopSmart is a full-stack e-commerce application with a React frontend, an Express backend, Prisma ORM, SQLite database, authentication, testing, and CI/CD workflows.
 
-## Architecture
+## Features
 
-The project is structured as a monorepo with three main components:
+- User authentication with JWT
+- Product browsing and shopping flow
+- Responsive React UI
+- Backend API using Express
+- Prisma ORM with SQLite
+- Unit, integration, and end-to-end tests
+- GitHub Actions CI
+- Dependabot automation
+- Deployment workflow support
 
-1. **Client (Frontend)**: 
-   - Built with React and Vite.
-   - Uses Context API for global state management (Auth, Cart, Wishlist).
-   - Styled with plain CSS using custom properties for theming, ensuring a lightweight and performant UI.
-   - Icons are provided by Lucide React.
-   - Designed to mimic a high-end "Dribbble" style aesthetic with smooth transitions and glassmorphism elements.
+## Tech Stack
 
-2. **Backend (Server)**:
-   - Built with Node.js and Express.
-   - Uses Prisma as the ORM to interact with a SQLite database.
-   - Secures API endpoints with JWT-based authentication.
-   - Handles products and user data.
+### Frontend
+- React
+- Vite
+- Context API
+- CSS
 
-3. **E2E Tests**:
-   - Built with Playwright.
-   - Covers key user workflows: authentication, shopping cart management, navigation, and product interactions.
+### Backend
+- Node.js
+- Express
+- Prisma
+- SQLite
+- JWT
 
-## Design Decisions
+### Testing
+- Vitest / React Testing Library
+- Backend API tests
+- Playwright
 
-- **Why SQLite + Prisma?** 
-  SQLite was chosen for its zero-configuration setup and portability, making the project easy to deploy and run locally without needing a separate database server. Prisma provides a type-safe, developer-friendly ORM that integrates seamlessly with SQLite.
+### DevOps
+- GitHub Actions
+- Dependabot
+- PM2 deployment workflow
 
-- **Why Context API instead of Redux?**
-  For an application of this scale, Context API (paired with `useReducer` or standard state) offers sufficient state management capabilities without the boilerplate of Redux. It manages the cart, wishlist, and user authentication seamlessly across the app.
+## Project Structure
 
-- **Vanilla CSS vs Tailwind/CSS-in-JS**:
-  To demonstrate a deep understanding of CSS fundamentals and to keep dependencies light, the project utilizes plain CSS with extensive use of CSS Custom Properties (Variables) for theming, typography, spacing, and animations.
+```text
+shopsmart/
+├── backend/
+├── client/
+├── e2e/
+├── .github/
+├── create-db.sh
+├── run.sh
+├── README.md
+└── Project Rubric.md
+```
 
-## Workflow & Deployment
+## Prerequisites
 
-- **CI/CD Pipeline**: GitHub Actions are configured to automate the testing, linting, and deployment processes.
-  - The CI workflow (`ci.yml`) runs unit/integration tests and linting for both frontend and backend, as well as Playwright E2E tests.
-  - The CD workflow (`deploy.yml`) is set up to automatically deploy changes to an AWS EC2 instance.
+- Node.js
+- npm
 
-- **Local Setup**:
-  To simplify local development, automated Bash scripts (`create-db.sh`, `run.sh`) handle dependency installation, database seeding, and concurrent server startup.
+## Setup
 
-## Challenges
+Run the setup script from the project root:
 
-- **Migration from MongoDB to Prisma/SQLite**: The project originally contained Mongoose schemas, which were fully migrated to Prisma. Managing the schema and resolving field mismatches (e.g., `_id` vs `id`) required careful auditing.
-- **E2E Testing Environments**: Ensuring the Vite dev server spins up dynamically and correctly proxies to the actual Node backend during headless E2E runs required configuring Playwright's `webServer` option correctly.
+```bash
+bash run.sh
+```
+
+This installs dependencies for both `backend` and `client`.
+
+## Running the Project
+
+### Backend
+```bash
+cd backend
+npm start
+```
+
+### Frontend
+```bash
+cd client
+npm run dev
+```
+
+## Testing
+
+### Frontend tests
+```bash
+cd client
+npm test
+```
+
+### Backend tests
+```bash
+cd backend
+npm test
+```
+
+### End-to-end tests
+```bash
+npx playwright test
+```
+
+## Environment Variables
+
+If your setup requires environment variables, configure them inside the relevant `.env` files for `backend` and `client`.
+
+## CI/CD
+
+This repository includes GitHub Actions workflows for:
+- Build and lint checks
+- Backend testing
+- End-to-end testing
+- Deployment automation
+
+## Scripts
+
+### `run.sh`
+Checks prerequisites and installs dependencies for both apps.
+
+### `create-db.sh`
+Initializes the database setup.
+
+## Notes
+
+- The project uses a local SQLite database for development.
+- Ensure all required npm scripts exist in both `backend` and `client`.
+- If deployment settings change, update the documentation to keep it in sync.
+
+## Author
+
+ShopSmart project for Newton School.
